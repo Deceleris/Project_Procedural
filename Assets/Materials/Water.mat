@@ -90,7 +90,7 @@ Material:
     - _DistortionScale: 1
     - _DistortionScale_1: 0.04
     - _DistortionSpeed: 1
-    - _Float: 2
+    - _Float: 0.003
     - _Float_1: -1.73
     - _FoamCutOff: 0.62
     - _FoamNoiseScale: 500
@@ -99,17 +99,46 @@ Material:
     - _FoamSpeed: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Wave1_ScrollSpeed: 0.5
+    - _Wave1_UVPower: 10
+    - _Wave1_UVScale: 0.2
+    - _Wave1_VoronoiEvolution: 0.1
+    - _Wave1_VoronoiPower: 6
+    - _Wave1_VoronoiScale: 2
+    - _Wave1_VoronoiSpeed: 0.1
+    - _Wave2_ScrollSpeed: -0.1
+    - _Wave2_UVPower: 0.5
+    - _Wave2_UVScale: 1
+    - _Wave2_VoronoiEvolution: 0.3
+    - _Wave2_VoronoiPower: 7.23
+    - _Wave2_VoronoiScale: 0.5
+    - _Wave2_VoronoiSpeed: 0.5
     - _WaveCutoff: 0.92
     - _WaveCutoll: 0.3
+    - _WaveEvloutionSpeed: 10
+    - _WaveNoise1_Power: 1
+    - _WaveNoise1_Scale: 0.2
+    - _WaveNoise1_ScrollSpeed: 0.5
+    - _WaveNoise2_Power: 8.01
+    - _WaveNoise2_Scale: 1
+    - _WaveNoise2_ScrollSpeed: 2
     - _WaveNoisePower: 0.5
     - _WaveNoiseScale: 1
+    - _WaveNoiseScale_1: 19.29
     - _WaveNoiseSpeed: 1
     - _WaveScale: 3
+    - _WaveScrollSpeed: 0.1
     - _WaveSpeed: 0.05
+    - _WaveVoronoiDensity: 0.01
     - _WaveWidth: 0.1
     - _WorldSize: 300
+    - __WAVE1_PRESENCE: 0.2
+    - __WAVE2_PRESENCE: 0.31
     m_Colors:
     - _DepthColor: {r: 0, g: 0.27705574, b: 1, a: 0}
     - _ShoreColor: {r: 0, g: 0.93945074, b: 1, a: 0}
     - _Vector2: {r: 0, g: 0, b: 0, a: 0}
+    - _Wave1_ScrollDir: {r: 1, g: 0, b: 0, a: 0}
+    - _Wave2_ScrollDir: {r: 1, g: 1, b: 0, a: 0}
+    - _WavesColor: {r: 0, g: 0.9715028, b: 1, a: 1}
   m_BuildTextureStacks: []

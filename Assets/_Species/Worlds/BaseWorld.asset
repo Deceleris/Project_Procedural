@@ -18,7 +18,7 @@ MonoBehaviour:
   noise:
     strength: 6
     numLayers: 4
-    baseRoughness: 0.012
+    baseRoughness: 0.015
     roughness: 3
     persistance: 0.4
     minValue: 0
