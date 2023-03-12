@@ -13,12 +13,27 @@ MonoBehaviour:
   m_Name: BaseWorld
   m_EditorClassIdentifier: 
   size: 300
+  layers: 10
+  waterLevel: 0.1
   noise:
     strength: 6
     numLayers: 4
-    baseRoughness: 0.01
-    roughness: 2.27
+    baseRoughness: 0.012
+    roughness: 3
     persistance: 0.4
     minValue: 0
+  tiles:
+  - startElevation: 0
+    endElevation: 0.1
+    tile: {fileID: 11400000, guid: 9e27eaeec7c2b4c47a73f141d37650ce, type: 2}
+  - startElevation: 0.1
+    endElevation: 0.18
+    tile: {fileID: 11400000, guid: e9f9c30c90412934482e93579986e186, type: 2}
+  - startElevation: 0.18
+    endElevation: 0.23
+    tile: {fileID: 11400000, guid: e9f9c30c90412934482e93579986e186, type: 2}
+  - startElevation: 0.23
+    endElevation: 1
+    tile: {fileID: 11400000, guid: 422c4f8120ed56d43810d7e066403aa3, type: 2}
   fallOffParamA: 2
   fallOffParamB: 1.72

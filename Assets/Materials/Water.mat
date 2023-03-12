@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4286838348381411882
+--- !u!114 &-1834860155745377528
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water
-  m_Shader: {fileID: -6465566751694194690, guid: e0bf0bfe9839da247bf0172fbdbcd99b, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 5cdc1c9811150034fa59ec4c61693962, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -36,7 +36,39 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _GroundMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShoreMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_500914026dc546319e7fe0ebb1a6b476_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterColor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterDepth:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _var8DirectionnalSampler_5476376f3a6d4834bf3cb331bf7b6b51_Mask_1693228914:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _var8DirectionnalSampler_5476376f3a6d4834bf3cb331bf7b6b51_Texture2D_411796190:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -54,7 +86,30 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Float: 0.002
-    - _NoiseScale: 300
-    m_Colors: []
+    - _DistortionPower: 3
+    - _DistortionScale: 1
+    - _DistortionScale_1: 0.04
+    - _DistortionSpeed: 1
+    - _Float: 2
+    - _Float_1: -1.73
+    - _FoamCutOff: 0.62
+    - _FoamNoiseScale: 500
+    - _FoamNoiseSpeed: 0.01
+    - _FoamScale: 2
+    - _FoamSpeed: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _WaveCutoff: 0.92
+    - _WaveCutoll: 0.3
+    - _WaveNoisePower: 0.5
+    - _WaveNoiseScale: 1
+    - _WaveNoiseSpeed: 1
+    - _WaveScale: 3
+    - _WaveSpeed: 0.05
+    - _WaveWidth: 0.1
+    - _WorldSize: 300
+    m_Colors:
+    - _DepthColor: {r: 0, g: 0.27705574, b: 1, a: 0}
+    - _ShoreColor: {r: 0, g: 0.93945074, b: 1, a: 0}
+    - _Vector2: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
