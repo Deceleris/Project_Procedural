@@ -20,6 +20,7 @@ public class World_Generator : MonoBehaviour
     public LayerMask waterLayer;
     public string waterSortinLayer;
     public Gradient waterColor;
+    public int waterShoreSize = 1;
 
     [Title ("Debug")]
     [SerializeField] InputAction generateInput;
@@ -184,9 +185,14 @@ public class World_Generator : MonoBehaviour
 
                 // Epaisseur du mask
                 if (edge) {
-                    for (int _x = x - 1; _x <= x + 1; _x++) {
-                        for (int _y = y - 1; _y <= y + 1; _y++) {
-                            if (IsInMap(_x, _y)) edgeCoords.Add((_x, _y, (_x == x && _x == y) ? 1 : 0.5f));
+                    if (waterShoreSize == 0) {
+                        edgeCoords.Add((x, y, 1));
+                    }
+                    else {
+                        for (int _x = x - waterShoreSize; _x <= x + waterShoreSize; _x++) {
+                            for (int _y = y - waterShoreSize; _y <= y + waterShoreSize; _y++) {
+                                if (IsInMap(_x, _y)) edgeCoords.Add((_x, _y, (_x == x && _x == y) ? 1 : 0.5f));
+                            }
                         }
                     }
                 }
@@ -234,8 +240,8 @@ public class World_Generator : MonoBehaviour
         waterRenderer.sortingLayerName = waterSortinLayer;
 
         Vector3 scale = Vector3.one * world.size / 3;
-        Vector3 position = Vector3.one * world.size;
         waterRenderer.transform.localScale = worldRenderer.transform.localScale = scale;
+        Vector3 position = Vector3.one * world.size;
         waterRenderer.transform.position = worldRenderer.transform.position = position;
 
         // =========================================== Tools

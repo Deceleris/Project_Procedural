@@ -90,13 +90,16 @@ Material:
     - _DistortionScale: 1
     - _DistortionScale_1: 0.04
     - _DistortionSpeed: 1
-    - _Float: 0.003
+    - _Float: -0.001
     - _Float_1: -1.73
     - _FoamCutOff: 0.62
+    - _FoamDistortion: 0.2
+    - _FoamDistortionScale: 3
     - _FoamNoiseScale: 500
     - _FoamNoiseSpeed: 0.01
-    - _FoamScale: 2
+    - _FoamScale: -0.18
     - _FoamSpeed: 1
+    - _MaskCorrection: -0.001
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Wave1_ScrollSpeed: 0.5
@@ -128,14 +131,15 @@ Material:
     - _WaveNoiseSpeed: 1
     - _WaveScale: 3
     - _WaveScrollSpeed: 0.1
-    - _WaveSpeed: 0.05
+    - _WaveSpeed: 0.1
     - _WaveVoronoiDensity: 0.01
     - _WaveWidth: 0.1
     - _WorldSize: 300
     - __WAVE1_PRESENCE: 0.2
-    - __WAVE2_PRESENCE: 0.31
+    - __WAVE2_PRESENCE: 0.3
     m_Colors:
     - _DepthColor: {r: 0, g: 0.27705574, b: 1, a: 0}
+    - _MaskCorrection: {r: 0, g: 0, b: 0, a: 0}
     - _ShoreColor: {r: 0, g: 0.93945074, b: 1, a: 0}
     - _Vector2: {r: 0, g: 0, b: 0, a: 0}
     - _Wave1_ScrollDir: {r: 1, g: 0, b: 0, a: 0}
