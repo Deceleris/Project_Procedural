@@ -11,7 +11,6 @@ public class World
     public int half;
 
     public float [,] elevation;
-    public float [,,] relativeElevation;
     public int [,,] occlusion;
 
     public static World current;
@@ -22,7 +21,6 @@ public class World
         layers = profile.layers;
         half = size / 2;
         elevation = new float[size, size];
-        relativeElevation = new float[size, size, layers];
         occlusion = new int[size, size, layers];
     }
 }

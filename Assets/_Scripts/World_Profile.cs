@@ -22,7 +22,6 @@ public class World_Profile : ScriptableObject
     public class MinMaxTile
     {
         public float startElevation = 0;
-        public float endElevation = 0;
         public Tile_Profile tile;
     }
 

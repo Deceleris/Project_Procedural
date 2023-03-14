@@ -9,7 +9,8 @@ public class Tile_Profile : Tile
 {
 
     public int layer;
-    public Gradient colorOverElevation;
+    public enum Mode { Tiled, Random }
+    public Mode mode;
     public List<Sprite> sprites;
 
     public override void RefreshTile(Vector3Int location, ITilemap tilemap)
@@ -25,12 +26,19 @@ public class Tile_Profile : Tile
     public override void GetTileData(Vector3Int p, ITilemap tilemap, ref TileData tileData)
     {
         if (World.current == null) return;
+
         int index = 0;
-        index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 0, p.y + 1, 0)) == this ? 1 : 0;
-        index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 1, p.y + 0, 0)) == this ? 2 : 0;
-        index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 0, p.y - 1, 0)) == this ? 4 : 0;
-        index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x - 1, p.y + 0, 0)) == this ? 8 : 0;
-        tileData.color = colorOverElevation.Evaluate(World.current.relativeElevation[p.x, p.y, layer]);
+        if (mode == Mode.Tiled) {
+            index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 0, p.y + 1, 0)) == this ? 1 : 0;
+            index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 1, p.y + 0, 0)) == this ? 2 : 0;
+            index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x + 0, p.y - 1, 0)) == this ? 4 : 0;
+            index += tilemap.GetTile<Tile_Profile>(new Vector3Int(p.x - 1, p.y + 0, 0)) == this ? 8 : 0;
+        }
+        else if (mode == Mode.Random) {
+            index = Random.Range(0, sprites.Count);
+        }
+
         tileData.sprite = sprites[index];
+        tileData.color = color;
     }
 }
