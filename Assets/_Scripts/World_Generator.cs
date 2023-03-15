@@ -8,10 +8,8 @@ using Sirenix.OdinInspector;
 public class World_Generator : MonoBehaviour
 {
 
-    [Title ("PROFILES")]
+    [Title ("MAIN")]
     public World_Profile profile;
-
-    [Title ("LAYERS")]
     public Tilemap layerPrefab;
 
     [Title ("WATER")]
@@ -22,61 +20,71 @@ public class World_Generator : MonoBehaviour
     public Gradient waterColor;
     public int waterShoreSize = 1;
 
-    [Title ("BLEND TEST")]
+    [Title ("BLEND")]
+    public Color dirtBlendColor;
     public float dirtLevel = 0.015f;
     public Material dirtBlendMaterial;
+    public string dirtSortingLayer;
 
-    [Title ("Debug")]
-    [SerializeField] InputAction generateInput;
+    [Title ("GRASS")]
+    public Material grassMaterial;
 
-    World world;
+    // ====================================================== VARIABLES
 
-    Tilemap [] layers;
+    // Common
+    [SerializeField, HideInInspector] World world;
+    [SerializeField, HideInInspector] Tilemap [] layers;
 
-    SpriteRenderer worldRenderer;
-    SpriteRenderer waterRenderer;
-    SpriteRenderer dirtBlendRenderer;
+    // Heightmap
+    [SerializeField, HideInInspector] SpriteRenderer heightRenderer;
+    [SerializeField, HideInInspector] Sprite heightSprite;
+    [SerializeField, HideInInspector] Texture2D heightTexture;
 
-    Sprite fullMaskSprite;
-    Sprite worldSprite;
-    Sprite waterSprite;
-    Sprite dirtBlendSprite;
+    // Water
+    [SerializeField, HideInInspector] SpriteRenderer waterRenderer;
+    [SerializeField, HideInInspector] Sprite waterSprite;
+    [SerializeField, HideInInspector] Texture2D waterShoreTexture;
+    [SerializeField, HideInInspector] Texture2D waterMaskTexture;
+    [SerializeField, HideInInspector] Texture2D waterColorTexture;
 
-    Texture2D fullMaskTexture;
-    Texture2D worldTexture;
-    Texture2D shoreMask;
-    Texture2D groundMask;
-    Texture2D waterMask;
-    Texture2D waterColorTexture;
-    Texture2D dirtBlendTexture;
+    // Dirt
+    [SerializeField, HideInInspector] SpriteRenderer dirtBlendRenderer;
+    [SerializeField, HideInInspector] Sprite dirtBlendSprite;
+    [SerializeField, HideInInspector] Texture2D dirtBlendTexture;
 
     public int size => profile.size;
 
     void Awake ()
     {
-        Generate();
-        generateInput.performed += (v) => Generate();
+        GenerateWorld();
     }
 
     [Button("GENERATE")]
-    void Generate()
+    void GenerateWorld()
     {
-        ClearAndInitMap();
+        SetupBases();
         GenerateHeightMap();
-        Test();
-        Display();
+        SetTileByElevation();
+        GenerateWater();
+        GenerateBlends();
+        GenerateGrass();
     }
 
-    void ClearAndInitMap ()
-    {
-        for (int i = transform.childCount - 1; i >= 0; i--) {
-            DestroyImmediate(transform.GetChild(i).gameObject);
-        }
+    // ======================================================= BASES
 
+    void SetupBases ()
+    {
+        // Initialisation des variables
         world = new (profile);
         layers = new Tilemap[world.layers];
         World.current = world;
 
+        // Suppression des enfants
+        for (int i = transform.childCount - 1; i >= 0; i--) {
+            DestroyImmediate(transform.GetChild(i).gameObject);
+        }
+
+        // Génération des layers
         for (int i = 0; i < world.layers; i++) {
             layers[i] = Instantiate<Tilemap>(layerPrefab, transform);
             layers[i].name = "Layer " + i;
@@ -86,16 +94,18 @@ public class World_Generator : MonoBehaviour
         }
     }
 
+    // ======================================================= ELEVATION
+
     void GenerateHeightMap()
     {
         NoiseFilter noiseFilter = new NoiseFilter (profile.noise);
         float min = float.MaxValue;
         float max = float.MinValue;
 
+        // Elevation obtenue grâce au calculs de la noise et stockage du min max
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
 
-                // Elevation obtenue grâce au calculs de la noise
                 Vector2Int position = new Vector2Int(x, y);
                 float elevation = noiseFilter.Evaluate(position);
                 if (elevation < min) min = elevation;
@@ -104,10 +114,10 @@ public class World_Generator : MonoBehaviour
             }
         }
 
+        // Le terrain est transformé en île et la transition des côtes est contrôlée
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
 
-                // Le terrain est transformé en île et la transition des côtes est contrôlée
                 float elevation = (world.elevation [x, y] - min) / (max - min);
                 float _x = Mathf.Abs(x / ((float)world.size / 2) - 1);
                 float _y = Mathf.Abs(y / ((float)world.size / 2) - 1);
@@ -120,7 +130,9 @@ public class World_Generator : MonoBehaviour
         }
     }
 
-    void Test ()
+    // ======================================================= TILES BY ELEVATION
+
+    void SetTileByElevation ()
     {
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
@@ -141,56 +153,54 @@ public class World_Generator : MonoBehaviour
         }
     }
 
-    void Display()
+    // ======================================================= SHADERS AND TEXTURES
+
+    void DisplayHeightMap()
     {
+        heightRenderer = new GameObject("Ground").AddComponent<SpriteRenderer>();
+        heightRenderer.transform.parent = transform;
+        heightTexture = new Texture2D(world.size, world.size);
+        Vector3 position = Vector3.one * world.size;
+        heightRenderer.transform.position = position;
+        heightTexture.Apply();
+        heightTexture.filterMode = FilterMode.Bilinear;
+        heightSprite = Sprite.Create(heightTexture, new(0, 0, world.size, world.size), Vector2.one / 2);
+        heightRenderer.sprite = heightSprite;
+    }
 
-        // =========================================== Init    
-
-        worldRenderer = new GameObject("Ground").AddComponent<SpriteRenderer>();
-        waterRenderer = new GameObject("Water").AddComponent<SpriteRenderer>();
-        dirtBlendRenderer = new GameObject("DirtBlend").AddComponent<SpriteRenderer>();
-        worldRenderer.transform.parent = transform;
-        waterRenderer.transform.parent = transform;
-        dirtBlendRenderer.transform.parent = transform;
-
-        fullMaskTexture = new Texture2D(world.size, world.size);
-        worldTexture = new Texture2D(world.size, world.size);
-        shoreMask = new Texture2D(world.size, world.size);
-        groundMask = new Texture2D(world.size, world.size);
-        waterMask = new Texture2D(world.size, world.size);
+    void GenerateWater ()
+    {
+        // Create textures
+        waterShoreTexture = new Texture2D(world.size, world.size);
+        waterMaskTexture = new Texture2D(world.size, world.size);
         waterColorTexture = new Texture2D(world.size, world.size);
-        dirtBlendTexture = new Texture2D(world.size, world.size);
+        waterShoreTexture.filterMode = FilterMode.Bilinear;
+        waterMaskTexture.filterMode = FilterMode.Bilinear;
+        waterColorTexture.filterMode = FilterMode.Bilinear;
 
-        // =========================================== Generate world base, ground and water masks
+        // =========================================== TEXTURE GENERATION
 
+        // Create mask and water color
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
                 float elevation = world.elevation[x, y];
-                worldTexture.SetPixel(x, y, worldColorByElevation.Evaluate(elevation));
-                float gm = elevation > profile.waterLevel ? 1 : 0;
                 float wm = elevation <= profile.waterLevel ? 1 : 0;
                 float wd = Mathf.Clamp01 (elevation / profile.waterLevel);
-                groundMask.SetPixel(x, y, new Color(gm, gm, gm, gm));
-                waterMask.SetPixel(x, y, new Color(wm, wm, wm, wm));
-                waterColorTexture.SetPixel(x, y, waterColor.Evaluate (wd));
+                waterMaskTexture.SetPixel(x, y, new Color(wm, wm, wm, wm));
+                waterColorTexture.SetPixel(x, y, waterColor.Evaluate(wd));
             }
         }
 
-        // =========================================== Generate shore mask
-
+        // Getting shores
         List<(int, int, float)> edgeCoords = new List<(int, int, float)>();
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
-
-                // Si au moin un voisin est de l'eau, alors je suis une côte
                 bool water = GetElevation(x, y) < profile.waterLevel;
                 bool waterUp = GetElevation (x, y + 1) < profile.waterLevel;
                 bool waterLeft = GetElevation (x - 1, y) < profile.waterLevel;
                 bool waterDown = GetElevation (x, y - 1) < profile.waterLevel;
                 bool waterRight = GetElevation (x + 1, y) < profile.waterLevel;
                 bool edge = !water && (waterUp || waterLeft || waterDown || waterRight);
-
-                // Epaisseur du mask
                 if (edge) {
                     if (waterShoreSize == 0) {
                         edgeCoords.Add((x, y, 1));
@@ -203,24 +213,47 @@ public class World_Generator : MonoBehaviour
                         }
                     }
                 }
-
-                shoreMask.SetPixel(x, y, new Color(0, 0, 0, 0));
+                waterShoreTexture.SetPixel(x, y, new Color(0, 0, 0, 0));
             }
         }
 
         // Add shores
         foreach ((int, int, float) coord in edgeCoords) {
-            float t = shoreMask.GetPixel(coord.Item1, coord.Item2).a;
+            float t = waterShoreTexture.GetPixel(coord.Item1, coord.Item2).a;
             float c = t > coord.Item3 ? 1 : coord.Item3;
-            shoreMask.SetPixel(coord.Item1, coord.Item2, new Color(c, c, c, c));
+            waterShoreTexture.SetPixel(coord.Item1, coord.Item2, new Color(c, c, c, c));
         }
 
-        // =========================================== Generate Dirt Blend
+        // ==================================================
+
+        // Apply textures
+        waterShoreTexture.Apply();
+        waterMaskTexture.Apply();
+        waterColorTexture.Apply();
+        waterMaterial.SetTexture("_ShoreMask", waterShoreTexture);
+        waterMaterial.SetTexture("_WaterMask", waterMaskTexture);
+        waterMaterial.SetTexture("_WaterColor", waterColorTexture);
+        waterMaterial.SetFloat("_WorldSize", profile.size);
+
+        // Create the renderer
+        waterSprite = Sprite.Create(waterMaskTexture, new(0, 0, world.size, world.size), Vector2.one / 2);
+        waterRenderer = new GameObject("Water").AddComponent<SpriteRenderer>();
+        waterRenderer.sprite = waterSprite;
+        waterRenderer.transform.parent = transform;
+        waterRenderer.sortingOrder = 1;
+        waterRenderer.material = waterMaterial;
+        waterRenderer.sortingLayerName = waterSortinLayer;
+        waterRenderer.transform.localScale = Vector3.one * 100;
+        waterRenderer.transform.position = new Vector3(1, 1, 0) * world.size;
+    }
+
+    void GenerateBlends ()
+    {
+        dirtBlendTexture = new Texture2D(world.size, world.size);
+        dirtBlendTexture.filterMode = FilterMode.Point;
 
         for (int x = 0; x < world.size; x++) {
             for (int y = 0; y < world.size; y++) {
-
-                // Si au moin un voisin n'est pas de la terre, alors je suis un rebord
                 bool dirt = GetElevation(x, y) >= dirtLevel;
                 bool dirtUp = GetElevation (x, y + 1) >= dirtLevel;
                 bool dirtLeft = GetElevation (x - 1, y) >= dirtLevel;
@@ -228,57 +261,37 @@ public class World_Generator : MonoBehaviour
                 bool dirtRight = GetElevation (x + 1, y) >= dirtLevel;
                 bool edge = dirt && !(dirtUp && dirtLeft && dirtDown && dirtRight);
                 float d = edge ? 1 : 0;
-                dirtBlendTexture.SetPixel(x, y, new Color (d, d, d, d));
+                dirtBlendTexture.SetPixel(x, y, new Color(d, d, d, d));
             }
         }
 
-        // =========================================== Finalise
-
-        fullMaskTexture.Apply();
-        worldTexture.Apply();
-        shoreMask.Apply();
-        groundMask.Apply();
-        waterMask.Apply();
-        waterColorTexture.Apply();
         dirtBlendTexture.Apply();
-
-        fullMaskTexture.filterMode = FilterMode.Bilinear;
-        worldTexture.filterMode = FilterMode.Bilinear;
-        groundMask.filterMode = FilterMode.Point;
-        shoreMask.filterMode = FilterMode.Bilinear;
-        waterMask.filterMode = FilterMode.Bilinear;
-        waterColorTexture.filterMode = FilterMode.Bilinear;
-        dirtBlendTexture.filterMode = FilterMode.Point;
-
-        waterMaterial.SetTexture("_ShoreMask", shoreMask);
-        waterMaterial.SetTexture("_GroundMask", groundMask);
-        waterMaterial.SetTexture("_WaterMask", waterMask);
-        waterMaterial.SetTexture("_WaterColor", waterColorTexture);
         dirtBlendMaterial.SetTexture("_DirtMask", dirtBlendTexture);
+        dirtBlendMaterial.SetFloat("_WorldScale", profile.size);
 
-        fullMaskSprite = Sprite.Create(fullMaskTexture, new(0, 0, world.size, world.size), Vector2.one / 2);
-        worldSprite = Sprite.Create(worldTexture, new(0, 0, world.size, world.size), Vector2.one / 2);
-        waterSprite = Sprite.Create(shoreMask, new(0, 0, world.size, world.size), Vector2.one / 2);
         dirtBlendSprite = Sprite.Create(dirtBlendTexture, new(0, 0, world.size, world.size), Vector2.one / 2);
-
-        worldRenderer.sprite = worldSprite;
-        waterRenderer.sprite = fullMaskSprite;
-        waterRenderer.material = waterMaterial;
-        waterRenderer.sortingOrder = 1;
-        waterRenderer.sortingLayerName = waterSortinLayer;
+        dirtBlendRenderer = new GameObject("DirtBlend").AddComponent<SpriteRenderer>();
         dirtBlendRenderer.sprite = dirtBlendSprite;
+        dirtBlendRenderer.color = dirtBlendColor;
+        dirtBlendRenderer.transform.parent = transform;
         dirtBlendRenderer.material = dirtBlendMaterial;
-
-        waterRenderer.transform.localScale = Vector3.one * 100;
         dirtBlendRenderer.transform.localScale = Vector3.one * 100;
-
-        Vector3 position = Vector3.one * world.size;
-        waterRenderer.transform.position = position;
-        worldRenderer.transform.position = position;
-        dirtBlendRenderer.transform.position = position;
-
-        // =========================================== Tools
+        dirtBlendRenderer.transform.position = new Vector3 (1, 1, 0) * world.size;
+        dirtBlendRenderer.sortingLayerName = dirtSortingLayer;
+        dirtBlendRenderer.sortingOrder = 0;
     }
+
+    void GenerateGrass ()
+    {
+        Tilemap map = layers[5];
+        TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
+        renderer.sortingLayerName = dirtSortingLayer;
+        renderer.sortingOrder = 2;
+        renderer.material = grassMaterial;
+        renderer.sortOrder = TilemapRenderer.SortOrder.TopLeft;
+    }
+
+    // ================================================ TOOLS
 
     float GetElevation(int x, int y)
     {

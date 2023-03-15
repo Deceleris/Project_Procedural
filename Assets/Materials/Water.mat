@@ -134,7 +134,7 @@ Material:
     - _WaveSpeed: 0.1
     - _WaveVoronoiDensity: 0.01
     - _WaveWidth: 0.1
-    - _WorldSize: 300
+    - _WorldSize: 150
     - __WAVE1_PRESENCE: 0.2
     - __WAVE2_PRESENCE: 0.3
     m_Colors:

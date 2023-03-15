@@ -1826,10 +1826,10 @@
     "m_Guid": {
         "m_GuidSerialized": "b57cb6bd-d176-4465-84b3-721e760f33b5"
     },
-    "m_Name": "GroundMask",
+    "m_Name": "WaterMask",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "GroundMask",
-    "m_DefaultReferenceName": "_GroundMask",
+    "m_RefNameGeneratedByDisplayName": "WaterMask",
+    "m_DefaultReferenceName": "_WaterMask",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1917,7 +1917,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "5429216e37b0421296b69e2222d11823",
     "m_Id": 0,
-    "m_DisplayName": "GroundMask",
+    "m_DisplayName": "WaterMask",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51319aea5f2a754e9ab2ded04ebef19, type: 3}
   m_Name: BaseWorld
   m_EditorClassIdentifier: 
-  size: 100
+  size: 150
   layers: 10
   waterLevel: 0.01
   noise:
@@ -29,9 +29,9 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: fa0ffc2e07230ea438969605ebf2ad86, type: 2}
   - startElevation: 0.015
     tile: {fileID: 11400000, guid: e9f9c30c90412934482e93579986e186, type: 2}
-  - startElevation: 0.02
+  - startElevation: 0.015
     tile: {fileID: 11400000, guid: 422c4f8120ed56d43810d7e066403aa3, type: 2}
-  - startElevation: 0.025
+  - startElevation: 0.04
     tile: {fileID: 11400000, guid: 264e7b9b7f4379c4a9337de6784e5216, type: 2}
   fallOffParamA: 2
   fallOffParamB: 1.72
